@@ -1,0 +1,32 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  IMAGE: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail-ai:test
+
+tasks:
+  default:
+    cmds:
+      - poetry install
+      - task: build
+  build:
+    vars:
+      DOCKERFILE: '{{ default "Dockerfile" .DOCKERFILE }}'
+    cmds:
+      - docker build -f {{ .DOCKERFILE }} -t {{ .IMAGE }} .
+  build-basic:
+    cmds:
+      - task: build
+        vars: { DOCKERFILE: Dockerfile.basic }
+  build-optimized:
+    cmds:
+      - task: build
+        vars:
+          DOCKERFILE: Dockerfile.optimized
+  build-production:
+    cmds:
+      - task: build
+  docker-push:
+    cmds:
+      - docker push {{ .IMAGE }}

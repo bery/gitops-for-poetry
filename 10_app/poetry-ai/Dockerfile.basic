@@ -1,0 +1,15 @@
+# Stage 1: Basic setup
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy project files
+COPY . .
+
+# Install Poetry and project dependencies
+RUN pip install poetry \
+    && poetry install --no-dev
+
+# Command to run the app
+CMD ["poetry", "run", "poetry-ai"]

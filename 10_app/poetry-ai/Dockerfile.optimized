@@ -1,0 +1,33 @@
+# Stage 1: Build dependencies
+FROM python:3.11-slim as builder
+
+# Set working directory
+WORKDIR /app
+
+# Install Poetry
+RUN pip install poetry
+
+# Copy only necessary files for dependency resolution
+COPY pyproject.toml poetry.lock ./
+
+# Install dependencies in a virtual environment
+RUN poetry config virtualenvs.create true \
+    && poetry install --no-dev
+
+# Stage 2: Production image
+FROM python:3.11-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy virtual environment from the builder stage
+COPY --from=builder /app /app
+
+# Copy application source files
+COPY . .
+
+# Use virtual environment
+ENV PATH="/app/.venv/bin:$PATH"
+
+# Command to run the app
+CMD ["poetry-ai"]

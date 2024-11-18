@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "python-poetry-app.fullname" . }}
+  labels:
+    app: {{ include "python-poetry-app.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "python-poetry-app.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "python-poetry-app.name" . }}
+    spec:
+      containers:
+        - name: python-poetry-app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 5000
+          env:
+            - name: APP_MODE
+              value: "production"

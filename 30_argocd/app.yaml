@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: python-poetry-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bery/gitops-for-poetry
+    targetRevision: HEAD
+    chart: python-poetry-app
+    helm:
+      values: |
+        image:
+          repository: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail-ai:test
+          tag: latest
+        replicaCount: 2
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

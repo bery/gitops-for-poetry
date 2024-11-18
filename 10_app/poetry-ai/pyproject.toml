@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "poetry-ai"
+version = "0.1.0"
+description = "A simple poetry generation app using Hugging Face GPT-2."
+authors = ["Your Name <your.email@example.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/yourusername/poetry-ai"
+repository = "https://github.com/yourusername/poetry-ai"
+keywords = ["poetry", "AI", "GPT-2", "text-generation", "Hugging Face"]
+
+[tool.poetry.dependencies]
+python = "~3.11"
+transformers = "^4.34.0"
+torch = "^2.0.0"
+
+[tool.poetry.scripts]
+poetry-ai = "poetry_ai.main:main"
+
+[build-system]
+requires = ["poetry>=1.2"]
+build-backend = "poetry.core.masonry.api"
