@@ -18,7 +18,7 @@ RUN poetry config virtualenvs.create true \
 COPY . .
 
 # Stage 2: Production image (distroless and rootless)
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM gcr.io/distroless/python3-debian12:nonroot
 
 # Set working directory
 WORKDIR /app
@@ -33,4 +33,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 USER nonroot:nonroot
 
 # Command to run the app
-CMD ["poetry-ai"]
+CMD ["-m", "poetry_ai.main"]
