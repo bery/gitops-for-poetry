@@ -7,7 +7,7 @@ dotenv: [".env", "{{.HOME}}/.env", "{{.USER_WORKING_DIR}}/.env"]
 vars:
   AWS_ECR_PROFILE: "{{.AWS_ECR_PROFILE}}"
   DOCKER_REGISTRY_REGION: "us-east-2"
-  IMAGE: "{{.DOCKER_REGISTRY}}/cloudtrail:test"
+  IMAGE: "{{.DOCKER_REGISTRY}}/cloudtrail"
 
 tasks:
   authenticate:
@@ -30,21 +30,33 @@ tasks:
   build:
     vars:
       DOCKERFILE: '{{ default "Dockerfile" .DOCKERFILE }}'
+      DOCKER_TAG: '{{ default "production" .DOCKER_TAG }}'
     cmds:
-      - docker build -f {{ .DOCKERFILE }} -t {{ .IMAGE }} .
+      - docker build -f {{ .DOCKERFILE }} -t {{ .IMAGE }}:{{.DOCKER_TAG}} .
   build-basic:
     cmds:
       - task: build
-        vars: { DOCKERFILE: Dockerfile.basic }
+        vars:
+          DOCKERFILE: Dockerfile.basic
+          DOCKER_TAG: basic
   build-optimized:
     cmds:
       - task: build
         vars:
           DOCKERFILE: Dockerfile.optimized
+          DOCKER_TAG: optimized
   build-production:
     cmds:
       - task: build
-  docker-push:
-    deps: [docker-authenticate]
+  docker-push-production:
+    deps: [docker-authenticate, build]
+    cmds:
+      - docker push {{ .IMAGE }}
+  docker-push-optimized:
+    deps: [docker-authenticate, build-optimized]
+    cmds:
+      - docker push {{ .IMAGE }}
+  docker-push-basic:
+    deps: [docker-authenticate, build-basic]
     cmds:
       - docker push {{ .IMAGE }}
