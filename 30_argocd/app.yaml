@@ -13,8 +13,6 @@ spec:
       values: |
         image:
           repository: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail
-          tag: test
-        replicaCount: 2
   destination:
     server: https://kubernetes.default.svc
     namespace: experimental
