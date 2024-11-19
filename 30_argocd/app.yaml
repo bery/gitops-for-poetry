@@ -6,13 +6,13 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/bery/gitops-for-poetry
-    targetRevision: HEAD
-    chart: python-poetry-app
+    repoURL: https://github.com/bery/gitops-for-poetry.git
+    targetRevision: main
+    path: 20_helm
     helm:
       values: |
         image:
-          repository: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail:test
+          repository: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail
           tag: latest
         replicaCount: 2
   destination:

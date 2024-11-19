@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail-ai:test
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   name: python-poetry-app
