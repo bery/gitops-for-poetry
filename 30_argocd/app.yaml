@@ -12,12 +12,12 @@ spec:
     helm:
       values: |
         image:
-          repository: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail-ai:test
+          repository: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail:test
           tag: latest
         replicaCount: 2
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: experimental
   syncPolicy:
     automated:
       prune: true

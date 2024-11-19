@@ -2,10 +2,27 @@
 
 version: "3"
 
+dotenv: [".env", "{{.HOME}}/.env", "{{.USER_WORKING_DIR}}/.env"]
+
 vars:
-  IMAGE: 157206707803.dkr.ecr.us-east-2.amazonaws.com/cloudtrail-ai:test
+  AWS_ECR_PROFILE: "{{.AWS_ECR_PROFILE}}"
+  DOCKER_REGISTRY_REGION: "us-east-2"
+  IMAGE: "{{.DOCKER_REGISTRY}}/cloudtrail:test"
 
 tasks:
+  authenticate:
+    status:
+      - aws sts get-caller-identity --query \"Account\" --profile {{.AWS_ECR_PROFILE}}
+    cmds:
+      - aws sso login --profile {{.AWS_ECR_PROFILE}}
+      # - assume --un {{.AWS_ECR_PROFILE}}
+
+  docker-authenticate:
+    deps:
+      - task: authenticate
+        vars: { AWS_ECR_PROFILE: "{{.AWS_ECR_PROFILE}}" }
+    cmds:
+      - aws ecr get-login-password --region {{.DOCKER_REGISTRY_REGION}} --profile {{.AWS_ECR_PROFILE}} | docker login --username AWS --password-stdin {{.DOCKER_REGISTRY}} || true
   default:
     cmds:
       - poetry install
@@ -28,5 +45,6 @@ tasks:
     cmds:
       - task: build
   docker-push:
+    deps: [docker-authenticate]
     cmds:
       - docker push {{ .IMAGE }}
