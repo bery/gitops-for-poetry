@@ -22,4 +22,4 @@ spec:
             - containerPort: 5000
           env:
             - name: APP_MODE
-              value: "production"
+              value: "{{ .Values.env.APP_MODE }}"

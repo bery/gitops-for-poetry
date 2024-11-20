@@ -25,3 +25,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+env:
+  APP_MODE: development
